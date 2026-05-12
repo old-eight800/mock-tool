@@ -1,0 +1,51 @@
+[
+  {
+    "method": "POST",
+    "path": "/b2b/api/p1price/p1/batch/v2",
+    "status": 200,
+    "content_type": "application/json",
+    "note": "body 为商品编码数组",
+    "response": "codes = body if isinstance(body, list) else []\nif not codes:\n    result = {\"code\": 400, \"message\": \"请求体不能为空\", \"data\": [], \"resultMessage\": \"失败\"}\nelse:\n    result = {\n        \"code\": 0,\n        \"message\": \"success\",\n        \"data\": [\n            {\"goodsCode\": c, \"p1Price\": round(500 + random.random() * 2000, 2)}\n            for c in codes\n        ],\n        \"resultMessage\": \"成功\",\n    }",
+    "id": "96e34351",
+    "mode": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/users/{id}",
+    "status": 200,
+    "content_type": "application/json",
+    "note": "",
+    "response": "{\n  \"id\": \"{{path.id}}\",\n  \"name\": \"{{query.name}}\",\n  \"token\": \"{{random.uuid}}\",\n  \"time\": \"{{now}}\"\n}",
+    "id": "19ea71c7"
+  },
+  {
+    "method": "POST",
+    "path": "/distribution-service/open-api/channel/default/get-price-with-strategy",
+    "status": 200,
+    "content_type": "application/json",
+    "mode": "template",
+    "note": "随机价格策略",
+    "response": "{\n  \"code\": 200,\n  \"message\": \"success\",\n  \"data\": {\n    \"priceBeforeStrategy\": {{= round(3000 + random.random()*1180, 2) }},\n    \"priceAfterStrategy\":  {{= round(3000 + random.random()*1180, 2) }}\n  },\n  \"resultMessage\": \"成功\"\n}",
+    "id": "60c1537b"
+  },
+  {
+    "method": "POST",
+    "path": "/task-center-service/task/page",
+    "status": 200,
+    "content_type": "application/json",
+    "mode": "script",
+    "note": "回显请求中的 taskNo",
+    "response": "b = body if isinstance(body, dict) else {}\ntask_no = b.get(\"taskNo\") or \"RW202605061641301623\"\nresult = {\n    \"code\": 200,\n    \"resultMessage\": \"\",\n    \"data\": [{\n        \"id\": 8245,\n        \"taskNo\": task_no,\n        \"taskTypeName\": \"导入\",\n        \"taskSubTypeName\": \"拍照单海外批量发货\",\n        \"sysSource\": \"银河\",\n        \"status\": 80,\n        \"statusName\": \"已通过\",\n        \"approveStatus\": 80,\n        \"approveStatusName\": \"审批通过\",\n        \"createDt\": datetime.now().strftime(\"%Y-%m-%d %H:%M:%S\"),\n        \"uploadFileName\": \"拍照单海外批量发货_\" + uuid.uuid4().hex + \".xlsx\",\n        \"uploadFileUrl\": \"\",\n        \"executeModel\": \"\",\n        \"executeModelName\": \"\",\n    }],\n    \"totalCount\": 1,\n}",
+    "id": "40083d1a"
+  },
+  {
+    "method": "POST",
+    "path": "/task-center-service/task/create-import",
+    "status": 200,
+    "content_type": "application/json",
+    "mode": "script",
+    "note": "返回新生成的任务编号",
+    "response": "now = datetime.now()\ntask_no = \"RW\" + now.strftime(\"%Y%m%d%H%M%S\") + str(now.microsecond)[:3]\nresult = {\"code\": 200, \"resultMessage\": \"\", \"data\": task_no}",
+    "id": "04a9a8f6"
+  }
+]

@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: mock-tool
+    runtime: python
+    plan: free
+    rootDir: mock_tool
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn mock_tool:app --bind 0.0.0.0:$PORT --workers 1 --timeout 60
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: ADMIN_USER
+        value: admin
+      - key: ADMIN_PASS
+        sync: false   # 在 Render dashboard 手动填写, 不进仓库
